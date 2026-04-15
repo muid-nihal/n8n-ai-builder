@@ -25,7 +25,7 @@ Before any setup, ask these questions (you can ask them all at once):
 1. **What operating system are you on?** (Windows, Mac, Linux)
 2. **Do you already have an n8n instance running?** (cloud at app.n8n.cloud, self-hosted, or not yet)
 3. **Do you have Node.js installed?** (they can check by running `node --version` in their terminal)
-4. **What AI coding agent are you using?** (Claude Code, Codex CLI, Cursor, Windsurf, Copilot, other)
+4. **What AI coding agent are you using?** (Claude Code, Codex CLI, Codex Desktop, Cursor, Windsurf, Copilot, other)
 5. **Have you used n8n before?** (helps you calibrate how much to explain)
 
 Wait for their answers before proceeding.
@@ -147,22 +147,21 @@ If it works, they'll see their workflows being downloaded. If they have no workf
 
 Based on which AI agent they're using:
 
-### Claude Code
+### Claude Code (CLI + VS Code Extension)
 
-Claude Code gets the most out of this repo because it supports MCP servers and skills.
+Claude Code gets the most out of this repo because it supports both MCP servers and skills.
 
 #### Install Skills (Recommended)
 
 The `skills/claude-code/` directory contains 8 expert n8n skills. To install them:
 
-```bash
-# Copy all skills to the Claude Code skills directory
-# The exact path depends on their OS:
-
-# Windows:
+**Windows:**
+```cmd
 xcopy /E /I skills\claude-code\* "%USERPROFILE%\.claude\skills\"
+```
 
-# Mac/Linux:
+**Mac/Linux:**
+```bash
 cp -r skills/claude-code/* ~/.claude/skills/
 ```
 
@@ -170,50 +169,108 @@ After copying, restart Claude Code (close and reopen VS Code, or restart the CLI
 
 **What the skills do:** They teach Claude Code expert-level knowledge about n8n — how to write expressions, configure nodes, build workflow patterns, validate configurations, and write JavaScript/Python code for n8n Code nodes. Without skills, Claude Code will still work using the CLAUDE.md instructions, but skills make it significantly better.
 
-#### Set Up n8n MCP Server (Optional, Advanced)
+#### Set Up n8n MCP Server (Optional but Recommended)
 
-The n8n-mcp server gives Claude Code real-time access to documentation for 1,084 n8n nodes and 2,709 workflow templates. This is optional but powerful.
+The n8n-mcp server gives Claude Code real-time access to documentation for 1,084 n8n nodes and 2,709 workflow templates. It also allows Claude Code to manage workflows directly through MCP tools (create, update, validate, test).
 
-1. Install the MCP server: `npm install -g @czlonkowski/n8n-mcp` (check https://github.com/czlonkowski/n8n-mcp for latest install instructions)
-2. Add to Claude Code's MCP config. Create/edit the MCP config file:
+**Step 1:** A template MCP config is included in the repo as `.mcp.json.example`. Copy it to create your local config:
 
-   **Windows:** `%USERPROFILE%\.claude\.mcp.json`
-   **Mac/Linux:** `~/.claude/.mcp.json`
+```bash
+cp .mcp.json.example .mcp.json
+```
 
-   ```json
-   {
-     "mcpServers": {
-       "n8n-mcp": {
-         "command": "npx",
-         "args": ["-y", "@czlonkowski/n8n-mcp"],
-         "env": {
-           "N8N_API_URL": "https://your-n8n-instance.app.n8n.cloud/api/v1",
-           "N8N_API_KEY": "your-api-key",
-           "MCP_MODE": "stdio"
-         }
-       }
-     }
-   }
-   ```
+**Step 2:** Edit `.mcp.json` and fill in your n8n details:
 
-3. Restart Claude Code.
+```json
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://your-n8n-instance.app.n8n.cloud",
+        "N8N_API_KEY": "your-n8n-api-key-here"
+      }
+    }
+  }
+}
+```
 
-**Test it:** Ask Claude Code "search for the Slack node in n8n". If MCP is working, it will use the search_nodes tool.
+**Important notes:**
+- `N8N_API_URL` — Your n8n instance URL (same as N8N_URL in .env, but without trailing slash)
+- `N8N_API_KEY` — Same API key as in your .env file
+- `MCP_MODE` must be `"stdio"` for Claude Code
+- `LOG_LEVEL` and `DISABLE_CONSOLE_OUTPUT` prevent log noise from interfering with the MCP protocol
+- `.mcp.json` is gitignored — your credentials stay local
 
-### Codex CLI
+**Step 3:** You can also install the MCP config globally so it works across all projects:
 
-Codex can use this repo effectively through the CLAUDE.md file (which Codex reads as project instructions).
+**Windows:** Copy `.mcp.json` to `%USERPROFILE%\.claude\.mcp.json`
+**Mac/Linux:** Copy `.mcp.json` to `~/.claude/.mcp.json`
 
-1. Make sure Codex is configured to read CLAUDE.md (most AI agents do this automatically)
-2. The scripts (`npm run pull`, `npm run push`, etc.) work from any terminal — Codex can run them
-3. Skills and MCP are not available for Codex, but the CLAUDE.md contains comprehensive n8n knowledge
+**Step 4:** Restart Claude Code.
+
+**Test it:** Ask Claude Code "search for the Gmail node in n8n". If MCP is working, it will use the `search_nodes` tool and return detailed node documentation.
+
+**MCP Tools Available:**
+| Tool | What It Does |
+|------|-------------|
+| `search_nodes` | Find n8n nodes by name or functionality |
+| `get_node` | Get detailed documentation for a specific node |
+| `validate_node` | Validate a node's configuration |
+| `search_templates` | Browse 2,709 workflow templates |
+| `get_template` | Get a specific template with full JSON |
+| `n8n_create_workflow` | Create a workflow on your n8n instance |
+| `n8n_update_full_workflow` | Update an existing workflow |
+| `n8n_validate_workflow` | Validate a workflow against your instance |
+| `n8n_list_workflows` | List all workflows on your instance |
+| `n8n_get_workflow` | Get a workflow's full JSON |
+| `n8n_test_workflow` | Test-run a workflow |
+| `n8n_executions` | View execution history |
+
+### Codex (CLI + Desktop App)
+
+Codex reads project instructions from `AGENTS.md` (included in this repo — it's identical to CLAUDE.md). Codex also supports skills.
+
+#### Install Skills (Recommended)
+
+Same 8 expert skills work with Codex. Install them to the Codex skills directory:
+
+**Windows:**
+```cmd
+xcopy /E /I skills\claude-code\* "%USERPROFILE%\.agents\skills\"
+```
+
+**Mac/Linux:**
+```bash
+mkdir -p ~/.agents/skills
+cp -r skills/claude-code/* ~/.agents/skills/
+```
+
+After copying, restart Codex (close and reopen the CLI or desktop app).
+
+**Verify:** Ask Codex "What n8n skills do you have?" — it should list the 8 skills.
+
+#### Set Up n8n MCP Server (Optional)
+
+If Codex supports MCP servers in your version, you can set up the n8n-mcp server. Check Codex documentation for the MCP config file location, then use the same configuration as shown in the Claude Code section above.
+
+#### How It Works
+
+- Codex reads `AGENTS.md` automatically when you open this project
+- All npm scripts work from the terminal — Codex can run `npm run pull`, `npm run push`, etc.
+- Skills give Codex the same expert n8n knowledge as Claude Code
+- The workflow is the same: describe what you want, and Codex builds it
 
 ### Cursor / Windsurf / Other AI IDEs
 
 1. Open this project folder in your IDE
 2. The AI assistant will automatically read CLAUDE.md for context
 3. Use the npm scripts from the integrated terminal
-4. Skills and MCP are not available, but CLAUDE.md provides comprehensive guidance
+4. Skills and MCP are not currently supported by these IDEs — the agent uses CLAUDE.md for all n8n knowledge
 
 ---
 
@@ -302,15 +359,25 @@ If the user hits issues at any point:
 - Make sure they copied `.env.example` to `.env` and filled in the values
 - The `.env` file should be in the project root, not in a subfolder
 
-### Skills not loading in Claude Code
+### Skills not loading
+
+**Claude Code:**
 - Skills go in `~/.claude/skills/` (Mac/Linux) or `%USERPROFILE%\.claude\skills\` (Windows)
 - Each skill needs its own subfolder with a `SKILL.md` file
 - Restart Claude Code after adding skills
 
+**Codex (CLI + Desktop):**
+- Skills go in `~/.agents/skills/` (Mac/Linux) or `%USERPROFILE%\.agents\skills\` (Windows)
+- Same subfolder structure: each skill needs `<name>/SKILL.md`
+- Restart Codex after adding skills
+
 ### MCP server not connecting
-- Check the `.mcp.json` path and format
-- Make sure the n8n API URL includes `/api/v1` at the end
-- Restart Claude Code after changing MCP config
+- Check that `.mcp.json` exists in the project root (copy from `.mcp.json.example`)
+- Make sure `N8N_API_URL` does NOT have a trailing slash
+- Make sure `MCP_MODE` is set to `"stdio"`
+- Check that `LOG_LEVEL` is `"error"` and `DISABLE_CONSOLE_OUTPUT` is `"true"` — other log levels can break the MCP protocol
+- Restart your agent after changing MCP config
+- Try running `npx n8n-mcp` manually in your terminal to see if the package installs correctly
 
 ---
 
@@ -323,7 +390,7 @@ After setup is complete, the user has:
 3. **Validation** to catch errors before pushing
 4. **An AI agent** that can create n8n workflows from natural language
 5. **Git version control** for all workflow changes
-6. **(Optional) Skills** that make Claude Code an n8n expert
-7. **(Optional) MCP server** for real-time node documentation access
+6. **(Optional) Skills** that make their agent (Claude Code or Codex) an n8n expert
+7. **(Optional) MCP server** for real-time node documentation and workflow management
 
 They can now describe any automation they want, and their AI agent will build it.

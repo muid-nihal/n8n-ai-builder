@@ -11,7 +11,7 @@ A development environment that connects your AI coding agent (Claude Code, Codex
 - **Pull/push scripts** to sync workflows between local files and n8n
 - **Validation** to catch errors before they hit your instance
 - **Agent instructions** (CLAUDE.md) that teach any AI agent how to build n8n workflows correctly
-- **8 expert skills** for Claude Code (optional) covering expressions, patterns, validation, and more
+- **8 expert skills** for Claude Code and Codex (optional) covering expressions, patterns, validation, and more
 - **MCP server support** for real-time access to 1,084 n8n node docs and 2,709 templates (optional)
 - **Git version control** for full workflow change history
 
@@ -93,11 +93,13 @@ n8n-ai-workflow-builder/
 ├── workflows/             # n8n workflow JSON files (synced with your instance)
 ├── scripts/               # Helper scripts (run, execute, sync, etc.)
 ├── skills/
-│   └── claude-code/       # 8 expert n8n skills for Claude Code
+│   └── claude-code/       # 8 expert n8n skills (works with Claude Code + Codex)
 ├── .env.example           # Template for API credentials
+├── .mcp.json.example      # Template for MCP server config
 ├── n8n-manager.js         # Core pull/push engine
 ├── validate-workflow.js   # Workflow validation
-├── CLAUDE.md              # AI agent instructions (the brain)
+├── CLAUDE.md              # AI agent instructions (Claude Code)
+├── AGENTS.md              # AI agent instructions (Codex CLI + Desktop)
 ├── SETUP.md               # Agent-guided setup protocol
 ├── package.json           # Project config
 └── README.md              # This file
@@ -105,19 +107,20 @@ n8n-ai-workflow-builder/
 
 ## Agent Compatibility
 
-| Agent | CLAUDE.md | Skills | MCP Server |
-|-------|-----------|--------|------------|
-| **Claude Code** | Yes | Yes | Yes |
-| **Codex CLI** | Yes | No | No |
-| **Cursor** | Yes | No | No |
-| **Windsurf** | Yes | No | No |
-| **Copilot** | Yes | No | No |
+| Agent | Instructions | Skills | MCP Server |
+|-------|-------------|--------|------------|
+| **Claude Code** (CLI + VS Code) | CLAUDE.md | Yes | Yes |
+| **Codex CLI** | AGENTS.md | Yes | Check docs |
+| **Codex Desktop** | AGENTS.md | Yes | Check docs |
+| **Cursor** | CLAUDE.md | No | No |
+| **Windsurf** | CLAUDE.md | No | No |
+| **Copilot** | CLAUDE.md | No | No |
 
-All agents can use the core functionality (CLAUDE.md + scripts). Claude Code gets the full experience with skills and MCP.
+All agents can use the core functionality (instructions + scripts). Claude Code and Codex get the full experience with skills.
 
-## Included Skills (Claude Code)
+## Included Skills
 
-The `skills/claude-code/` directory contains 8 expert skills that can be installed into Claude Code:
+The `skills/claude-code/` directory contains 8 expert skills that can be installed into Claude Code or Codex:
 
 | Skill | What It Teaches |
 |-------|----------------|
@@ -150,7 +153,7 @@ Install instructions are in [skills/claude-code/README.md](skills/claude-code/RE
 
 Found a bug or want to improve the agent instructions? PRs welcome.
 
-- **CLAUDE.md**: The core knowledge base — improvements here help all agents
+- **CLAUDE.md / AGENTS.md**: The core knowledge base — edit CLAUDE.md (canonical), then sync to AGENTS.md
 - **Skills**: Each skill is in `skills/claude-code/<name>/SKILL.md`
 - **Scripts**: Keep them generic and dependency-light (only `dotenv`)
 

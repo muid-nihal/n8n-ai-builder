@@ -1,34 +1,74 @@
-# n8n Skills for Claude Code
+# n8n Skills for AI Agents
 
-These are 8 expert skills that teach Claude Code deep knowledge about n8n workflow development.
+These are 8 expert skills that teach AI coding agents deep knowledge about n8n workflow development.
 
 ## What Are Skills?
 
-Skills are markdown files that Claude Code loads as specialized knowledge. When you ask Claude Code to do something n8n-related, it reads the relevant skill to understand exactly how to help.
+Skills are markdown files that AI coding agents load as specialized knowledge. When you ask your agent to do something n8n-related, it reads the relevant skill to understand exactly how to help.
+
+## Supported Agents
+
+| Agent | Skills Path | Instruction File |
+|-------|------------|-----------------|
+| **Claude Code** (CLI + VS Code) | `~/.claude/skills/<name>/SKILL.md` | CLAUDE.md |
+| **Codex CLI** | `~/.agents/skills/<name>/SKILL.md` | AGENTS.md |
+| **Codex Desktop** | `~/.agents/skills/<name>/SKILL.md` | AGENTS.md |
 
 ## Installation
 
+### Claude Code
+
 Copy the skill folders to your Claude Code skills directory:
 
-### Windows
-
+**Windows:**
 ```cmd
 xcopy /E /I skills\claude-code\* "%USERPROFILE%\.claude\skills\"
 ```
 
-### Mac / Linux
-
+**Mac / Linux:**
 ```bash
 cp -r skills/claude-code/* ~/.claude/skills/
 ```
 
+### Codex (CLI + Desktop)
+
+Copy the same skill folders to the Codex skills directory:
+
+**Windows:**
+```cmd
+xcopy /E /I skills\claude-code\* "%USERPROFILE%\.agents\skills\"
+```
+
+**Mac / Linux:**
+```bash
+mkdir -p ~/.agents/skills
+cp -r skills/claude-code/* ~/.agents/skills/
+```
+
+### Both Agents on Same Machine
+
+If you use both Claude Code and Codex, install to both paths:
+
+**Windows:**
+```cmd
+xcopy /E /I skills\claude-code\* "%USERPROFILE%\.claude\skills\"
+xcopy /E /I skills\claude-code\* "%USERPROFILE%\.agents\skills\"
+```
+
+**Mac / Linux:**
+```bash
+cp -r skills/claude-code/* ~/.claude/skills/
+mkdir -p ~/.agents/skills
+cp -r skills/claude-code/* ~/.agents/skills/
+```
+
 ### Verify
 
-After copying, restart Claude Code (close and reopen VS Code, or restart the CLI). Then ask:
+After copying, restart your agent (close and reopen VS Code, or restart the CLI). Then ask:
 
 > "What n8n skills do you have?"
 
-Claude Code should list the 8 skills.
+The agent should list the 8 skills.
 
 ## Skills Included
 
