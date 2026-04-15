@@ -1,0 +1,34 @@
+{
+    "name": "n8n-ai-workflow-builder",
+    "version": "1.0.0",
+    "description": "Build n8n workflows using natural language with any AI coding agent",
+    "main": "n8n-manager.js",
+    "scripts": {
+        "pull": "node n8n-manager.js pull",
+        "push": "node n8n-manager.js push",
+        "validate": "node validate-workflow.js",
+        "validate:all": "node validate-workflow.js --all",
+        "sync:pull": "node scripts/sync-pull.js",
+        "sync:push": "node scripts/sync-push.js",
+        "run": "node scripts/run-workflow.js",
+        "execute": "node scripts/execute-workflow.js",
+        "delete": "node scripts/delete-files.js"
+    },
+    "keywords": [
+        "n8n",
+        "workflows",
+        "automation",
+        "ai",
+        "claude",
+        "codex",
+        "mcp",
+        "workflow-automation",
+        "no-code"
+    ],
+    "author": "",
+    "license": "MIT",
+    "type": "commonjs",
+    "dependencies": {
+        "dotenv": "^17.2.3"
+    }
+}

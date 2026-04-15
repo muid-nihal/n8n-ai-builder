@@ -1,0 +1,54 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Node modules
+node_modules/
+
+# MCP configuration (contains API keys)
+.mcp.json
+
+# Claude Code directories
+.claude/
+.agent/
+
+# Execution result files
+execution-result.json
+execution-detail.json
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# Backup files
+*.bak
+*.backup
+
+# System files
+*.pid
+*.seed
+*.pid.lock
