@@ -12,7 +12,8 @@
         "sync:push": "node scripts/sync-push.js",
         "run": "node scripts/run-workflow.js",
         "execute": "node scripts/execute-workflow.js",
-        "delete": "node scripts/delete-files.js"
+        "delete": "node scripts/delete-files.js",
+        "sync:instructions": "node scripts/sync-instructions.js"
     },
     "keywords": [
         "n8n",

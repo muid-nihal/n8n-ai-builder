@@ -1,74 +1,74 @@
 # n8n Skills for AI Agents
 
-These are 8 expert skills that teach AI coding agents deep knowledge about n8n workflow development.
+8 expert skills that teach AI coding agents deep knowledge about n8n workflow development.
 
 ## What Are Skills?
 
 Skills are markdown files that AI coding agents load as specialized knowledge. When you ask your agent to do something n8n-related, it reads the relevant skill to understand exactly how to help.
 
-## Supported Agents
-
-| Agent | Skills Path | Instruction File |
-|-------|------------|-----------------|
-| **Claude Code** (CLI + VS Code) | `~/.claude/skills/<name>/SKILL.md` | CLAUDE.md |
-| **Codex CLI** | `~/.agents/skills/<name>/SKILL.md` | AGENTS.md |
-| **Codex Desktop** | `~/.agents/skills/<name>/SKILL.md` | AGENTS.md |
-
 ## Installation
+
+Copy the skill folders to your agent's skills directory:
 
 ### Claude Code
 
-Copy the skill folders to your Claude Code skills directory:
-
 **Windows:**
 ```cmd
-xcopy /E /I skills\claude-code\* "%USERPROFILE%\.claude\skills\"
+xcopy /E /I skills\n8n\* "%USERPROFILE%\.claude\skills\"
 ```
 
 **Mac / Linux:**
 ```bash
-cp -r skills/claude-code/* ~/.claude/skills/
+cp -r skills/n8n/* ~/.claude/skills/
 ```
 
 ### Codex (CLI + Desktop)
 
-Copy the same skill folders to the Codex skills directory:
-
 **Windows:**
 ```cmd
-xcopy /E /I skills\claude-code\* "%USERPROFILE%\.agents\skills\"
+xcopy /E /I skills\n8n\* "%USERPROFILE%\.agents\skills\"
 ```
 
 **Mac / Linux:**
 ```bash
 mkdir -p ~/.agents/skills
-cp -r skills/claude-code/* ~/.agents/skills/
+cp -r skills/n8n/* ~/.agents/skills/
 ```
 
 ### Both Agents on Same Machine
 
-If you use both Claude Code and Codex, install to both paths:
-
 **Windows:**
 ```cmd
-xcopy /E /I skills\claude-code\* "%USERPROFILE%\.claude\skills\"
-xcopy /E /I skills\claude-code\* "%USERPROFILE%\.agents\skills\"
+xcopy /E /I skills\n8n\* "%USERPROFILE%\.claude\skills\"
+xcopy /E /I skills\n8n\* "%USERPROFILE%\.agents\skills\"
 ```
 
 **Mac / Linux:**
 ```bash
-cp -r skills/claude-code/* ~/.claude/skills/
-mkdir -p ~/.agents/skills
-cp -r skills/claude-code/* ~/.agents/skills/
+cp -r skills/n8n/* ~/.claude/skills/
+mkdir -p ~/.agents/skills && cp -r skills/n8n/* ~/.agents/skills/
 ```
+
+### Other Agents
+
+If your agent supports skills, check its documentation for the skills directory path and copy the contents of `skills/n8n/` there. Each skill is a folder with a `SKILL.md` file inside.
 
 ### Verify
 
-After copying, restart your agent (close and reopen VS Code, or restart the CLI). Then ask:
+After copying, restart your agent (close and reopen the IDE, or restart the CLI). Then ask:
 
 > "What n8n skills do you have?"
 
 The agent should list the 8 skills.
+
+## Agent Skills Directory Reference
+
+| Agent | Skills Path |
+|-------|------------|
+| Claude Code (CLI + VS Code) | `~/.claude/skills/<name>/SKILL.md` |
+| Codex CLI | `~/.agents/skills/<name>/SKILL.md` |
+| Codex Desktop | `~/.agents/skills/<name>/SKILL.md` |
+| Other agents | Check agent documentation |
 
 ## Skills Included
 

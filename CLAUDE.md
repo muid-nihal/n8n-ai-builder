@@ -1,7 +1,11 @@
-# CLAUDE.md - AI Agent Instructions for n8n Workflow Development
+# n8n AI Workflow Builder — Agent Instructions
+
+> **This is the canonical instruction file.** All agent-specific files (CLAUDE.md, AGENTS.md,
+> .cursorrules, .windsurfrules, .github/copilot-instructions.md) are auto-generated copies.
+> Edit this file, then run `npm run sync:instructions` to update all copies.
 
 > **This file teaches any AI coding agent how to build, manage, and deploy n8n workflows.**
-> It works with Claude Code, Codex, Cursor, Windsurf, and any agent that reads project instructions.
+> It works with Claude Code, Codex, Cursor, Windsurf, Copilot, and any agent that reads project instructions.
 
 ## Project Purpose
 
@@ -28,9 +32,9 @@ If the user hasn't set up the project yet, read [SETUP.md](SETUP.md) and guide t
 | `npm run sync:pull` | Pull + validate all |
 | `npm run sync:push` | Validate + push changed workflows |
 
-### Skills (Claude Code Only)
+### Skills
 
-If skills are installed in `~/.claude/skills/`, you have access to 8 expert n8n skills:
+If n8n skills are installed in your agent's skills directory, you have access to 8 expert n8n skills:
 
 | Skill | Purpose | Priority |
 |-------|---------|----------|
@@ -43,12 +47,16 @@ If skills are installed in `~/.claude/skills/`, you have access to 8 expert n8n 
 | **n8n-code-python** | Python in Code nodes | For Code node Python |
 | **n8n-workflow-auditor** | Design quality audit | When reviewing workflows |
 
-### MCP Server (Claude Code Only)
+Skills are in the `skills/n8n/` directory. See [skills/n8n/README.md](skills/n8n/README.md) for install instructions for your specific agent.
+
+### MCP Server
 
 If the n8n-mcp server is configured, you have direct access to:
 - **1,084 n8n nodes** (537 core + 547 community) with documentation
 - **2,709 workflow templates** with metadata
 - Real-world examples and patterns
+
+See `.mcp.json.example` for the configuration template.
 
 ---
 
@@ -414,7 +422,7 @@ Before considering a workflow complete:
 
 - [n8n Documentation](https://docs.n8n.io)
 - [n8n-mcp GitHub](https://github.com/czlonkowski/n8n-mcp) — MCP server for node docs
-- [n8n-skills GitHub](https://github.com/czlonkowski/n8n-skills) — Claude Code skills for n8n
+- [n8n-skills GitHub](https://github.com/czlonkowski/n8n-skills) — Original skills for n8n
 - [SETUP.md](SETUP.md) — First-time setup guide (agent-readable)
 
 ---

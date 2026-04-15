@@ -6,13 +6,13 @@ Describe what you want automated. Your AI agent researches the right n8n nodes, 
 
 ## What This Is
 
-A development environment that connects your AI coding agent (Claude Code, Codex, Cursor, Windsurf, etc.) to your n8n instance. It includes:
+A development environment that connects your AI coding agent to your n8n instance. It includes:
 
 - **Pull/push scripts** to sync workflows between local files and n8n
 - **Validation** to catch errors before they hit your instance
-- **Agent instructions** (CLAUDE.md) that teach any AI agent how to build n8n workflows correctly
-- **8 expert skills** for Claude Code and Codex (optional) covering expressions, patterns, validation, and more
-- **MCP server support** for real-time access to 1,084 n8n node docs and 2,709 templates (optional)
+- **Universal agent instructions** that teach any AI agent how to build n8n workflows correctly
+- **8 expert skills** for agents that support them (Claude Code, Codex)
+- **MCP server support** for real-time access to 1,084 n8n node docs and 2,709 templates
 - **Git version control** for full workflow change history
 
 ## Quick Start
@@ -60,7 +60,7 @@ Tell your AI agent what you want:
 ```
 You describe what you want
         |
-AI agent reads CLAUDE.md (learns n8n patterns)
+AI agent reads project instructions (learns n8n patterns)
         |
 Researches nodes & templates (via MCP or docs)
         |
@@ -85,42 +85,49 @@ Workflow appears in n8n, ready to activate
 | `npm run execute -- <id> --wait` | Execute a workflow and show results |
 | `npm run sync:pull` | Pull + validate all |
 | `npm run sync:push` | Validate + push changed files only |
+| `npm run sync:instructions` | Sync INSTRUCTIONS.md to all agent files |
 
 ## Project Structure
 
 ```
 n8n-ai-workflow-builder/
-├── workflows/             # n8n workflow JSON files (synced with your instance)
-├── scripts/               # Helper scripts (run, execute, sync, etc.)
+├── INSTRUCTIONS.md            # Canonical agent instructions (single source of truth)
+├── CLAUDE.md                  # -> Claude Code reads this (auto-synced copy)
+├── AGENTS.md                  # -> Codex reads this (auto-synced copy)
+├── .cursorrules               # -> Cursor reads this (auto-synced copy)
+├── .windsurfrules             # -> Windsurf reads this (auto-synced copy)
+├── .github/
+│   └── copilot-instructions.md # -> Copilot reads this (auto-synced copy)
+├── SETUP.md                   # Agent-guided setup protocol
+├── .env.example               # Template for API credentials
+├── .mcp.json.example          # Template for MCP server config
+├── workflows/                 # n8n workflow JSON files (synced with your instance)
+├── scripts/                   # Helper scripts (run, execute, sync, etc.)
 ├── skills/
-│   └── claude-code/       # 8 expert n8n skills (works with Claude Code + Codex)
-├── .env.example           # Template for API credentials
-├── .mcp.json.example      # Template for MCP server config
-├── n8n-manager.js         # Core pull/push engine
-├── validate-workflow.js   # Workflow validation
-├── CLAUDE.md              # AI agent instructions (Claude Code)
-├── AGENTS.md              # AI agent instructions (Codex CLI + Desktop)
-├── SETUP.md               # Agent-guided setup protocol
-├── package.json           # Project config
-└── README.md              # This file
+│   └── n8n/                   # 8 expert n8n skills (agent-neutral)
+├── n8n-manager.js             # Core pull/push engine
+├── validate-workflow.js       # Workflow validation
+├── package.json               # Project config
+└── README.md                  # This file
 ```
 
 ## Agent Compatibility
 
 | Agent | Instructions | Skills | MCP Server |
 |-------|-------------|--------|------------|
-| **Claude Code** (CLI + VS Code) | CLAUDE.md | Yes | Yes |
-| **Codex CLI** | AGENTS.md | Yes | Check docs |
-| **Codex Desktop** | AGENTS.md | Yes | Check docs |
-| **Cursor** | CLAUDE.md | No | No |
-| **Windsurf** | CLAUDE.md | No | No |
-| **Copilot** | CLAUDE.md | No | No |
+| **Claude Code** (CLI + VS Code) | CLAUDE.md | Yes (`~/.claude/skills/`) | Yes |
+| **Codex CLI** | AGENTS.md | Yes (`~/.agents/skills/`) | Check docs |
+| **Codex Desktop** | AGENTS.md | Yes (`~/.agents/skills/`) | Check docs |
+| **Cursor** | .cursorrules | No | No |
+| **Windsurf** | .windsurfrules | No | No |
+| **GitHub Copilot** | .github/copilot-instructions.md | No | No |
+| **Any other agent** | INSTRUCTIONS.md (manual) | No | No |
 
-All agents can use the core functionality (instructions + scripts). Claude Code and Codex get the full experience with skills.
+All instruction files contain identical content — they're auto-synced copies of `INSTRUCTIONS.md`. Edit the canonical file and run `npm run sync:instructions` to propagate.
 
 ## Included Skills
 
-The `skills/claude-code/` directory contains 8 expert skills that can be installed into Claude Code or Codex:
+The `skills/n8n/` directory contains 8 expert skills installable into Claude Code or Codex:
 
 | Skill | What It Teaches |
 |-------|----------------|
@@ -133,7 +140,7 @@ The `skills/claude-code/` directory contains 8 expert skills that can be install
 | **n8n-code-python** | Python in Code nodes — _input, standard library, limitations |
 | **n8n-workflow-auditor** | Design quality audit — naming, error handling, performance, security |
 
-Install instructions are in [skills/claude-code/README.md](skills/claude-code/README.md).
+Install instructions are in [skills/n8n/README.md](skills/n8n/README.md).
 
 ## Requirements
 
@@ -153,15 +160,15 @@ Install instructions are in [skills/claude-code/README.md](skills/claude-code/RE
 
 Found a bug or want to improve the agent instructions? PRs welcome.
 
-- **CLAUDE.md / AGENTS.md**: The core knowledge base — edit CLAUDE.md (canonical), then sync to AGENTS.md
-- **Skills**: Each skill is in `skills/claude-code/<name>/SKILL.md`
+- **INSTRUCTIONS.md**: The core knowledge base — edit this, then run `npm run sync:instructions`
+- **Skills**: Each skill is in `skills/n8n/<name>/SKILL.md`
 - **Scripts**: Keep them generic and dependency-light (only `dotenv`)
 
 ## Credits
 
 - [n8n](https://n8n.io) — The workflow automation platform
 - [n8n-mcp](https://github.com/czlonkowski/n8n-mcp) — MCP server for n8n node documentation
-- [n8n-skills](https://github.com/czlonkowski/n8n-skills) — Original Claude Code skills for n8n
+- [n8n-skills](https://github.com/czlonkowski/n8n-skills) — Original skills for n8n
 
 ## License
 
